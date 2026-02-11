@@ -64,7 +64,7 @@ export function Contact() {
 
         <div className="mt-24 text-center">
           <p className="text-sm text-gray-500">
-            © 2026 Анна Соколова. Все права защищены.
+            © 2026 Валентина Косова. Все права защищены.
           </p>
         </div>
       </div>
