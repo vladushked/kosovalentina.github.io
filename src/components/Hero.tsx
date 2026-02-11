@@ -13,7 +13,7 @@ export function Hero() {
           UX/UI Designer
         </p>
         <h1 className="text-5xl md:text-7xl lg:text-8xl mb-8 tracking-tight">
-          Анна Соколова
+          Валентина Косова
         </h1>
         <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
           Создаю интуитивные цифровые продукты, которые решают реальные проблемы пользователей

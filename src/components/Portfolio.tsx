@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { PortfolioItem } from './PortfolioItem';
 
 const projects = [
@@ -37,6 +37,31 @@ const projects = [
 ];
 
 export function Portfolio() {
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? []);
+    setUploadedImages((current) => {
+      current.forEach((url) => URL.revokeObjectURL(url));
+      return files.map((file) => URL.createObjectURL(file));
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      uploadedImages.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [uploadedImages]);
+
+  const projectsWithImages = useMemo(
+    () =>
+      projects.map((project, index) => ({
+        ...project,
+        image: uploadedImages[index] ?? project.image
+      })),
+    [uploadedImages]
+  );
+
   return (
     <section id="portfolio" className="py-24 px-6 bg-gray-50">
       <div className="max-w-7xl mx-auto">
@@ -45,10 +70,26 @@ export function Portfolio() {
             Избранные проекты
           </p>
           <h2 className="text-4xl md:text-5xl lg:text-6xl">Портфолио</h2>
+          <div className="mt-8 max-w-xl">
+            <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="portfolio-images">
+              Загрузите изображения для проектов
+            </label>
+            <input
+              id="portfolio-images"
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageUpload}
+              className="block w-full text-sm text-gray-600 file:mr-4 file:rounded-full file:border-0 file:bg-black file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-800"
+            />
+            <p className="mt-2 text-sm text-gray-500">
+              Первые 4 изображения заменят превью в портфолио.
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {projects.map((project) => (
+          {projectsWithImages.map((project) => (
             <PortfolioItem key={project.id} {...project} />
           ))}
         </div>
